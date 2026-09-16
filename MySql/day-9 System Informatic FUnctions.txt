@@ -1,0 +1,868 @@
+System information Functions:
+Aggregate Functions(): Only applicable to numeric data types but no other data types. 
+There are total five function :
+-----------------------
+1.count()
+2.min()
+3.max()
+4.avg()
+5.sum()
+
+Clauses:
+In mysql clauses are used to control how data is filtered, grouped, sorted, or modified in SQL quereies,
+where clause:
+--------------
+Filtered records based on specified conditions where clause can be used as  comparision operators, logical operators and etc...... operators.
+syntax:
+--------
+select column1,column2.... from table where condition;
+
+group by clause:
+------------------
+The group by clause is used to group the rows having the same values in one or column more columns is commonly used with aggregate functions such count(). min(), max(), sum(), avg().
+syntax:
+----------
+select column_name, aggregate_function(column_name) from table_name group By column_name;
+
+Having clause:
+===============
+The having clause is used to filter grouped records after group by clause. It is similar where but it works on grouped instead of individual rows.
+
+syntax:
+---------
+select column_name, agrreate_function(column_name) from table_name group by column_name having conditions;
+
+order by clause:
+================
+the order by clause is used to sort the result set in ascending (ASC) or descending
+Here (ASC)  is optional to put or not 
+syntax:
+========
+select column_name from table_name order by column-name;
+
+Execution order of clause:
+===========================
+1.From
+2.Where
+3.Group by
+4.Having
+5.Select 
+6.Order by 
+
+yashaswi@yashaswi-Dell-G15-5530:~$ mysql -u root -p 
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.4.11-0ubuntu0.26.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases ;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.02 sec)
+
+mysql> create pfs6;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'pfs6' at line 1
+mysql> create database pfs6;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| pfs6               |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> use pfs6;
+Database changed
+mysql> select version();
++-------------------------+
+| version()               |
++-------------------------+
+| 8.4.11-0ubuntu0.26.04.1 |
++-------------------------+
+1 row in set (0.00 sec)
+
+mysql> CREATE TABLE Employees (
+    ->     emp_id INT PRIMARY KEY,
+    ->     emp_name VARCHAR(50),
+    ->     department VARCHAR(30),
+    ->     salary DECIMAL(10,2),
+    ->     experience INT,
+    ->     city VARCHAR(30)
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> INSERT INTO Employees VALUES
+    -> (101,'Rahul','IT',65000,5,'Hyderabad'),
+    -> (102,'Priya','HR',45000,3,'Chennai'),
+    -> (103,'Amit','Finance',70000,6,'Bangalore'),
+    -> (104,'Sneha','IT',80000,8,'Hyderabad'),
+    -> (105,'Kiran','Sales',40000,2,'Pune'),
+    -> (106,'Ravi','HR',50000,4,'Mumbai'),
+    -> (107,'Anjali','IT',90000,10,'Delhi'),
+    -> (108,'Suresh','Finance',55000,5,'Chennai'),
+    -> (109,'Divya','Sales',48000,3,'Hyderabad'),
+    -> (110,'Vikram','IT',75000,7,'Bangalore');
+Query OK, 10 rows affected (0.04 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select * from Employees; 
++--------+----------+------------+----------+------------+-----------+
+| emp_id | emp_name | department | salary   | experience | city      |
++--------+----------+------------+----------+------------+-----------+
+|    101 | Rahul    | IT         | 65000.00 |          5 | Hyderabad |
+|    102 | Priya    | HR         | 45000.00 |          3 | Chennai   |
+|    103 | Amit     | Finance    | 70000.00 |          6 | Bangalore |
+|    104 | Sneha    | IT         | 80000.00 |          8 | Hyderabad |
+|    105 | Kiran    | Sales      | 40000.00 |          2 | Pune      |
+|    106 | Ravi     | HR         | 50000.00 |          4 | Mumbai    |
+|    107 | Anjali   | IT         | 90000.00 |         10 | Delhi     |
+|    108 | Suresh   | Finance    | 55000.00 |          5 | Chennai   |
+|    109 | Divya    | Sales      | 48000.00 |          3 | Hyderabad |
+|    110 | Vikram   | IT         | 75000.00 |          7 | Bangalore |
++--------+----------+------------+----------+------------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT COUNT(*) FROM Employees;
++----------+
+| COUNT(*) |
++----------+
+|       10 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT COUNT(emp_id) FROM Employees;
++---------------+
+| COUNT(emp_id) |
++---------------+
+|            10 |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT COUNT(*) FROM Employees;
++----------+
+| COUNT(*) |
++----------+
+|       10 |
++----------+
+1 row in set (0.01 sec)
+
+mysql> SELECT SUM(salary) FROM Employees;
++-------------+
+| SUM(salary) |
++-------------+
+|   618000.00 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT AVG(salary) FROM Employees;
++--------------+
+| AVG(salary)  |
++--------------+
+| 61800.000000 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MIN(salary) FROM Employees;
++-------------+
+| MIN(salary) |
++-------------+
+|    40000.00 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MAX(salary) FROM Employees;
++-------------+
+| MAX(salary) |
++-------------+
+|    90000.00 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MIN(experience) FROM Employees;
++-----------------+
+| MIN(experience) |
++-----------------+
+|               2 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MAX(experience) FROM Employees;
++-----------------+
+| MAX(experience) |
++-----------------+
+|              10 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT AVG(experience) FROM Employees;
++-----------------+
+| AVG(experience) |
++-----------------+
+|          5.3000 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT SUM(experience) FROM Employees;
++-----------------+
+| SUM(experience) |
++-----------------+
+|              53 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT
+    ->     COUNT(*) AS total_employees,
+    ->     MIN(salary) AS minimum_salary,
+    ->     MAX(salary) AS maximum_salary,
+    ->     AVG(salary) AS average_salary,
+    ->     SUM(salary) AS total_salary
+    -> FROM Employees;
++-----------------+----------------+----------------+----------------+--------------+
+| total_employees | minimum_salary | maximum_salary | average_salary | total_salary |
++-----------------+----------------+----------------+----------------+--------------+
+|              10 |       40000.00 |       90000.00 |   61800.000000 |    618000.00 |
++-----------------+----------------+----------------+----------------+--------------+
+1 row in set (0.00 sec)
+
+mysql> CREATE TABLE STUDENTS (
+    ->     StudentID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     Name VARCHAR(50),
+    ->     Age INT,
+    ->     Department VARCHAR(30),
+    ->     Marks INT,
+    ->     City VARCHAR(30)
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>  Insert Sample Data (without StudentID)
+    -> INSERT INTO STUDENTS (Name, Age, Department, Marks, City) VALUES
+    -> ('Anil', 20, 'CSE', 85, 'Hyderabad'),
+    -> ('Sneha', 22, 'ECE', 75, 'Mumbai'),
+    -> ('Ravi', 20, 'CSE', NULL, 'Hyderabad'),
+    -> ('Divya', 23, 'MECH', 65, NULL),
+    -> ('Kiran', 22, 'ECE', 75, 'Pune'),
+    -> ('Varun', 21, 'CSE', 92, 'Chennai'),
+    -> ('Priya', 20, 'EEE', 88, 'Delhi'),
+    -> ('John', 22, 'MECH', 55, 'Mumbai'),
+    -> ('Rekha', 21, 'ECE', 75, 'Pune'),
+    -> ('Ramesh', 23, 'EEE', NULL, 'Delhi');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Data (without StudentID)
+INSERT INTO STUDENTS (Name, Age, Department, Marks, Cit' at line 1
+mysql> INSERT INTO STUDENTS (Name, Age, Department, Marks, City) VALUES
+    -> ('Anil', 20, 'CSE', 85, 'Hyderabad'),
+    -> ('Sneha', 22, 'ECE', 75, 'Mumbai'),
+    -> ('Ravi', 20, 'CSE', NULL, 'Hyderabad'),
+    -> ('Divya', 23, 'MECH', 65, NULL),
+    -> ('Kiran', 22, 'ECE', 75, 'Pune'),
+    -> ('Varun', 21, 'CSE', 92, 'Chennai'),
+    -> ('Priya', 20, 'EEE', 88, 'Delhi'),
+    -> ('John', 22, 'MECH', 55, 'Mumbai'),
+    -> ('Rekha', 21, 'ECE', 75, 'Pune'),
+    -> ('Ramesh', 23, 'EEE', NULL, 'Delhi');
+Query OK, 10 rows affected (0.02 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select * from students; 
+ERROR 1146 (42S02): Table 'pfs6.students' doesn't exist
+mysql> show tables;
++----------------+
+| Tables_in_pfs6 |
++----------------+
+| Employees      |
+| STUDENTS       |
++----------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM  STUDENTS;
++-----------+--------+------+------------+-------+-----------+
+| StudentID | Name   | Age  | Department | Marks | City      |
++-----------+--------+------+------------+-------+-----------+
+|         1 | Anil   |   20 | CSE        |    85 | Hyderabad |
+|         2 | Sneha  |   22 | ECE        |    75 | Mumbai    |
+|         3 | Ravi   |   20 | CSE        |  NULL | Hyderabad |
+|         4 | Divya  |   23 | MECH       |    65 | NULL      |
+|         5 | Kiran  |   22 | ECE        |    75 | Pune      |
+|         6 | Varun  |   21 | CSE        |    92 | Chennai   |
+|         7 | Priya  |   20 | EEE        |    88 | Delhi     |
+|         8 | John   |   22 | MECH       |    55 | Mumbai    |
+|         9 | Rekha  |   21 | ECE        |    75 | Pune      |
+|        10 | Ramesh |   23 | EEE        |  NULL | Delhi     |
++-----------+--------+------+------------+-------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM STUDENTS WHERE MARKS > 80 ;
++-----------+-------+------+------------+-------+-----------+
+| StudentID | Name  | Age  | Department | Marks | City      |
++-----------+-------+------+------------+-------+-----------+
+|         1 | Anil  |   20 | CSE        |    85 | Hyderabad |
+|         6 | Varun |   21 | CSE        |    92 | Chennai   |
+|         7 | Priya |   20 | EEE        |    88 | Delhi     |
++-----------+-------+------+------------+-------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM STUDENTS WHERE AGE  > 22 ;
++-----------+--------+------+------------+-------+-------+
+| StudentID | Name   | Age  | Department | Marks | City  |
++-----------+--------+------+------------+-------+-------+
+|         4 | Divya  |   23 | MECH       |    65 | NULL  |
+|        10 | Ramesh |   23 | EEE        |  NULL | Delhi |
++-----------+--------+------+------------+-------+-------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM STUDENTS WHERE DEPARTMENT  > CSE ;
+ERROR 1054 (42S22): Unknown column 'CSE' in 'where clause'
+mysql> SELECT * FROM STUDENTS WHERE DEPARTMENT  = CSE ;
+ERROR 1054 (42S22): Unknown column 'CSE' in 'where clause'
+mysql> SELECT * FROM STUDENTS WHERE DEPARTMENT  = 'CSE' ;
++-----------+-------+------+------------+-------+-----------+
+| StudentID | Name  | Age  | Department | Marks | City      |
++-----------+-------+------+------------+-------+-----------+
+|         1 | Anil  |   20 | CSE        |    85 | Hyderabad |
+|         3 | Ravi  |   20 | CSE        |  NULL | Hyderabad |
+|         6 | Varun |   21 | CSE        |    92 | Chennai   |
++-----------+-------+------+------------+-------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM STUDENTS WHERE CITY  = 'DELHI' ;
++-----------+--------+------+------------+-------+-------+
+| StudentID | Name   | Age  | Department | Marks | City  |
++-----------+--------+------+------------+-------+-------+
+|         7 | Priya  |   20 | EEE        |    88 | Delhi |
+|        10 | Ramesh |   23 | EEE        |  NULL | Delhi |
++-----------+--------+------+------------+-------+-------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM STUDENTS WHERE DEPARTMENT  = 'CSE' AND MARKS > 90;
++-----------+-------+------+------------+-------+---------+
+| StudentID | Name  | Age  | Department | Marks | City    |
++-----------+-------+------+------------+-------+---------+
+|         6 | Varun |   21 | CSE        |    92 | Chennai |
++-----------+-------+------+------------+-------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT DEPARTMENT ,COUNT(*) AS TOTAL_STUDENTS FROM STUDENTS GROUP BY DEPARTMENT ;
++------------+----------------+
+| DEPARTMENT | TOTAL_STUDENTS |
++------------+----------------+
+| CSE        |              3 |
+| ECE        |              3 |
+| MECH       |              2 |
+| EEE        |              2 |
++------------+----------------+
+4 rows in set (0.01 sec)
+
+mysql> SELECT DEPARTMENT ,AVG(MARKS) AS AVG_MARKS FROM STUDENTS GROUP BY DEPARTMENT ;
++------------+-----------+
+| DEPARTMENT | AVG_MARKS |
++------------+-----------+
+| CSE        |   88.5000 |
+| ECE        |   75.0000 |
+| MECH       |   60.0000 |
+| EEE        |   88.0000 |
++------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT DEPARTMENT ,MAX(MARKS) AS MAX_MARKS FROM STUDENTS GROUP BY DEPARTMENT ;
++------------+-----------+
+| DEPARTMENT | MAX_MARKS |
++------------+-----------+
+| CSE        |        92 |
+| ECE        |        75 |
+| MECH       |        65 |
+| EEE        |        88 |
++------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT DEPARTMENT ,MIN(MARKS) AS MIN_MARKS FROM STUDENTS GROUP BY DEPARTMENT ;
++------------+-----------+
+| DEPARTMENT | MIN_MARKS |
++------------+-----------+
+| CSE        |        85 |
+| ECE        |        75 |
+| MECH       |        55 |
+| EEE        |        88 |
++------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT DEPARTMENT ,SUM(MARKS) AS SUM_MARKS FROM STUDENTS GROUP BY DEPARTMENT ;
++------------+-----------+
+| DEPARTMENT | SUM_MARKS |
++------------+-----------+
+| CSE        |       177 |
+| ECE        |       225 |
+| MECH       |       120 |
+| EEE        |        88 |
++------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT CITY ,COUNT(*) AS TOATAL_STUDENTS FROM STUDENTS GROUP BY CITY ;
++-----------+-----------------+
+| CITY      | TOATAL_STUDENTS |
++-----------+-----------------+
+| Hyderabad |               2 |
+| Mumbai    |               2 |
+| NULL      |               1 |
+| Pune      |               2 |
+| Chennai   |               1 |
+| Delhi     |               2 |
++-----------+-----------------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT AGE ,COUNT(*) AS TOATAL_STUDENTS FROM STUDENTS GROUP BY AGE ;
++------+-----------------+
+| AGE  | TOATAL_STUDENTS |
++------+-----------------+
+|   20 |               3 |
+|   22 |               3 |
+|   23 |               2 |
+|   21 |               2 |
++------+-----------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT DEPARTMENT ,COUNT(*) AS TOTAL_STUDENTS FROM STUDENTS GROUP BY DEPARTMENT HAVING TOTAL_STUDENTS > 2 ; 
++------------+----------------+
+| DEPARTMENT | TOTAL_STUDENTS |
++------------+----------------+
+| CSE        |              3 |
+| ECE        |              3 |
++------------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT DEPARTMENT ,MAX(MARKS) AS MAX_MARKS FROM STUDENTS GROUP BY DEPARTMENT HAVING MAX_MARKS > 80;
++------------+-----------+
+| DEPARTMENT | MAX_MARKS |
++------------+-----------+
+| CSE        |        92 |
+| EEE        |        88 |
++------------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT DEPARTMENT ,MAX(MARKS) AS MIN_MARKS FROM STUDENTS GROUP BY DEPARTMENT HAVING MIN_MARKS < 70;
++------------+-----------+
+| DEPARTMENT | MIN_MARKS |
++------------+-----------+
+| MECH       |        65 |
++------------+-----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT DEPARTMENT ,SUM(MARKS) AS SUM_MARKS FROM STUDENTS GROUP BY DEPARTMENT HAVING SUM_MARKS > 100;
++------------+-----------+
+| DEPARTMENT | SUM_MARKS |
++------------+-----------+
+| CSE        |       177 |
+| ECE        |       225 |
+| MECH       |       120 |
++------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT DEPARTMENT ,AVG(MARKS) AS AVG_MARKS FROM STUDENTS GROUP BY DEPARTMENT HAVING AVG_MARKS > 75 ;
++------------+-----------+
+| DEPARTMENT | AVG_MARKS |
++------------+-----------+
+| CSE        |   88.5000 |
+| EEE        |   88.0000 |
++------------+-----------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT CITY ,COUNT(*) AS TOATAL_STUDENTS FROM STUDENTS GROUP BY CITY HAVING TOATAL_STUDENTS > 1;
++-----------+-----------------+
+| CITY      | TOATAL_STUDENTS |
++-----------+-----------------+
+| Hyderabad |               2 |
+| Mumbai    |               2 |
+| Pune      |               2 |
+| Delhi     |               2 |
++-----------+-----------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT DEPARTMENT ,SUM(MARKS) AS SUM_MARKS FROM STUDENTS GROUP BY DEPARTMENT HAVING SUM_MARKS > 150;
++------------+-----------+
+| DEPARTMENT | SUM_MARKS |
++------------+-----------+
+| CSE        |       177 |
+| ECE        |       225 |
++------------+-----------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT DEPARTMENT ,AVG(MARKS) AS AVG_MARKS FROM STUDENTS GROUP BY DEPARTMENT HAVING AVG_MARKS > 70 ;
++------------+-----------+
+| DEPARTMENT | AVG_MARKS |
++------------+-----------+
+| CSE        |   88.5000 |
+| ECE        |   75.0000 |
+| EEE        |   88.0000 |
++------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT DEPARTMENT ,MIN(MARKS) AS MIN_MARKS FROM STUDENTS GROUP BY DEPARTMENT HAVING MIN_MARKS < 60;
++------------+-----------+
+| DEPARTMENT | MIN_MARKS |
++------------+-----------+
+| MECH       |        55 |
++------------+-----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT DEPARTMENT, MAX(MARKS) AS MAX_MARKS FROM STUDENTS GROUP BY DEPARTMENT HAVING MAX_MARKS >90 ; 
++------------+-----------+
+| DEPARTMENT | MAX_MARKS |
++------------+-----------+
+| CSE        |        92 |
++------------+-----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT CITY, SUM(MARKS) AS CITY_MAXMARKS FROM STUDENT GROUP BY CITY HAVING CITY_MAXMARKS > 100;
+ERROR 1146 (42S02): Table 'pfs6.STUDENT' doesn't exist
+mysql> SELECT CITY, SUM(MARKS) AS CITY_MAXMARKS FROM STUDENTS GROUP BY CITY HAVING CITY_MAXMARKS > 100;
++--------+---------------+
+| CITY   | CITY_MAXMARKS |
++--------+---------------+
+| Mumbai |           130 |
+| Pune   |           150 |
++--------+---------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT MARKS FROM STUDENTS ORDER BY ASC;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ASC' at line 1
+mysql> SELECT MARKS FROM STUDENTS ORDER BY DESC;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DESC' at line 1
+mysql> SELECT MARKS FROM STUDENTS ORDER BY MARKS DESC ;
++-------+
+| MARKS |
++-------+
+|    92 |
+|    88 |
+|    85 |
+|    75 |
+|    75 |
+|    75 |
+|    65 |
+|    55 |
+|  NULL |
+|  NULL |
++-------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT MARKS FROM STUDENTS ORDER BY DEPARTMENT DESC ;
++-------+
+| MARKS |
++-------+
+|    65 |
+|    55 |
+|    88 |
+|  NULL |
+|    75 |
+|    75 |
+|    75 |
+|    85 |
+|  NULL |
+|    92 |
++-------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT MARKS FROM STUDENTS ORDER BY DEPARTMENT ASC ;
++-------+
+| MARKS |
++-------+
+|    85 |
+|  NULL |
+|    92 |
+|    75 |
+|    75 |
+|    75 |
+|    88 |
+|  NULL |
+|    65 |
+|    55 |
++-------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT DEPARTMENT FROM STUDENTS ORDER BY MARKS ASC ;
++------------+
+| DEPARTMENT |
++------------+
+| CSE        |
+| EEE        |
+| MECH       |
+| MECH       |
+| ECE        |
+| ECE        |
+| ECE        |
+| CSE        |
+| EEE        |
+| CSE        |
++------------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT DEPARTMENT,CITY FROM STUDENTS ORDER BY MARKS ASC ;
++------------+-----------+
+| DEPARTMENT | CITY      |
++------------+-----------+
+| CSE        | Hyderabad |
+| EEE        | Delhi     |
+| MECH       | Mumbai    |
+| MECH       | NULL      |
+| ECE        | Mumbai    |
+| ECE        | Pune      |
+| ECE        | Pune      |
+| CSE        | Hyderabad |
+| EEE        | Delhi     |
+| CSE        | Chennai   |
++------------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT DEPARTMENT,CITY,MARKS FROM STUDENTS ORDER BY MARKS ASC ;
++------------+-----------+-------+
+| DEPARTMENT | CITY      | MARKS |
++------------+-----------+-------+
+| CSE        | Hyderabad |  NULL |
+| EEE        | Delhi     |  NULL |
+| MECH       | Mumbai    |    55 |
+| MECH       | NULL      |    65 |
+| ECE        | Mumbai    |    75 |
+| ECE        | Pune      |    75 |
+| ECE        | Pune      |    75 |
+| CSE        | Hyderabad |    85 |
+| EEE        | Delhi     |    88 |
+| CSE        | Chennai   |    92 |
++------------+-----------+-------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT*FROM STUDENTS ORDER BY MARKS ;
++-----------+--------+------+------------+-------+-----------+
+| StudentID | Name   | Age  | Department | Marks | City      |
++-----------+--------+------+------------+-------+-----------+
+|         3 | Ravi   |   20 | CSE        |  NULL | Hyderabad |
+|        10 | Ramesh |   23 | EEE        |  NULL | Delhi     |
+|         8 | John   |   22 | MECH       |    55 | Mumbai    |
+|         4 | Divya  |   23 | MECH       |    65 | NULL      |
+|         2 | Sneha  |   22 | ECE        |    75 | Mumbai    |
+|         5 | Kiran  |   22 | ECE        |    75 | Pune      |
+|         9 | Rekha  |   21 | ECE        |    75 | Pune      |
+|         1 | Anil   |   20 | CSE        |    85 | Hyderabad |
+|         7 | Priya  |   20 | EEE        |    88 | Delhi     |
+|         6 | Varun  |   21 | CSE        |    92 | Chennai   |
++-----------+--------+------+------------+-------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT*FROM STUDENTS ORDER BY AGE DESC;
++-----------+--------+------+------------+-------+-----------+
+| StudentID | Name   | Age  | Department | Marks | City      |
++-----------+--------+------+------------+-------+-----------+
+|         4 | Divya  |   23 | MECH       |    65 | NULL      |
+|        10 | Ramesh |   23 | EEE        |  NULL | Delhi     |
+|         2 | Sneha  |   22 | ECE        |    75 | Mumbai    |
+|         5 | Kiran  |   22 | ECE        |    75 | Pune      |
+|         8 | John   |   22 | MECH       |    55 | Mumbai    |
+|         6 | Varun  |   21 | CSE        |    92 | Chennai   |
+|         9 | Rekha  |   21 | ECE        |    75 | Pune      |
+|         1 | Anil   |   20 | CSE        |    85 | Hyderabad |
+|         3 | Ravi   |   20 | CSE        |  NULL | Hyderabad |
+|         7 | Priya  |   20 | EEE        |    88 | Delhi     |
++-----------+--------+------+------------+-------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> select department, avg(age) as avg_age where age > 20 
+    -> group by department
+    -> having avg_age > 70
+    -> order by avg_age desc;
+ERROR 1054 (42S22): Unknown column 'department' in 'field list'
+mysql> SELECT DEPARTMENT, AVG(AGE) AS AVG_MARKS WHERE AGE > 20
+    -> GROUP BY DEPARTMENT 
+    -> HAVING AVG_MARKS > 70
+    -> ORDER BY AVG_MARKS DESC;
+ERROR 1054 (42S22): Unknown column 'DEPARTMENT' in 'field list'
+mysql> select department, avg(age) as avg_marks from students where age > 20
+    -> group by department 
+    -> having avg_marks > 70
+    -> order by avg_marks desc ; 
+ERROR 1146 (42S02): Table 'pfs6.students' doesn't exist
+mysql> SELECT Department, AVG(Marks) AS avg_marks
+    -> FROM STUDENTS
+    -> WHERE Age > 20
+    -> GROUP BY Department
+    -> HAVING avg_marks > 70
+    -> ORDER BY avg_marks DESC;
++------------+-----------+
+| Department | avg_marks |
++------------+-----------+
+| CSE        |   92.0000 |
+| ECE        |   75.0000 |
++------------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT MARKS, SUM(MARKS) AS TOTAL_MARKS
+    -> FROM STUDENTS 
+    -> WHERE MARKS > 70 
+    -> 
+[1]+  Stopped                    mysql -u root -p
+yashaswi@yashaswi-Dell-G15-5530:~$ mysql -u root -p
+Enter password: 
+ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+yashaswi@yashaswi-Dell-G15-5530:~$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 11
+Server version: 8.4.11-0ubuntu0.26.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use pfs6; 
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> select city, count(*) total_students where marks > 70 group by city having total_students > 1 order by total_students; 
+ERROR 1054 (42S22): Unknown column 'city' in 'field list'
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| pfs6               |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> use pfs6; 
+Database changed
+mysql> show tables ;
++----------------+
+| Tables_in_pfs6 |
++----------------+
+| Employees      |
+| STUDENTS       |
++----------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from students; 
+ERROR 1146 (42S02): Table 'pfs6.students' doesn't exist
+mysql> SELECT * FROM STUDENTS;
++-----------+--------+------+------------+-------+-----------+
+| StudentID | Name   | Age  | Department | Marks | City      |
++-----------+--------+------+------------+-------+-----------+
+|         1 | Anil   |   20 | CSE        |    85 | Hyderabad |
+|         2 | Sneha  |   22 | ECE        |    75 | Mumbai    |
+|         3 | Ravi   |   20 | CSE        |  NULL | Hyderabad |
+|         4 | Divya  |   23 | MECH       |    65 | NULL      |
+|         5 | Kiran  |   22 | ECE        |    75 | Pune      |
+|         6 | Varun  |   21 | CSE        |    92 | Chennai   |
+|         7 | Priya  |   20 | EEE        |    88 | Delhi     |
+|         8 | John   |   22 | MECH       |    55 | Mumbai    |
+|         9 | Rekha  |   21 | ECE        |    75 | Pune      |
+|        10 | Ramesh |   23 | EEE        |  NULL | Delhi     |
++-----------+--------+------+------------+-------+-----------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT CITY,COUNT(*) TOTAL_STUDENS
+    -> FROM STUDENTS
+    -> WHERE MARKS > 70
+    -> GROUP BY CITY
+    -> HAVING TOTAL_STUDENTS > 1 
+    -> ORDER BY TOTAL_MARKS;
+ERROR 1054 (42S22): Unknown column 'TOTAL_STUDENTS' in 'having clause'
+mysql> SELECT CITY,COUNT(*) TOTAL_STUDENTS FROM STUDENTS WHERE MARKS > 70 GROUP BY CITY HAVING TOTAL_STUDENTS > 1
+ ORDER BY TOTAL_STUDENTS;
++------+----------------+
+| CITY | TOTAL_STUDENTS |
++------+----------------+
+| Pune |              2 |
++------+----------------+
+1 row in set (0.00 sec)
+
+mysql> SEELCT DEPARMENT, SUM(MARKS) AS TOTAL_MARKS
+    -> FROM STUDENTS 
+    -> WHERE CITY IN ('HYDERBAD','PUNE')
+    -> GROUP BY DEPARTMENT 
+    -> HAVING TOTAL_MARKS > 100 BY TOTAL_MARKS;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SEELCT DEPARMENT, SUM(MARKS) AS TOTAL_MARKS
+FROM STUDENTS 
+WHERE CITY IN ('HYDER' at line 1
+mysql> SELECT DEPARMENT, SUM(MARKS) AS TOTAL_MARKS
+    -> FROM STUDENTS
+    -> WHERE CITY IN ('HYDERABAD','PUNE')
+    -> GROUP BY DEPARTMENT
+    -> HAVING TOTAL_MARKS > 100 BY TOTAL_MARKS;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'BY TOTAL_MARKS' at line 5
+mysql> CREATE TABLE sales (
+    ->    sale_id INT PRIMARY KEY,
+    ->    product VARCHAR(50),
+    ->    category VARCHAR(50),
+    ->    units_sold INT,
+    ->    unit_price INT,
+    ->    region VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> INSERT INTO sales (sale_id, product, category, units_sold, unit_price, region) VALUES
+    -> (1,  'Keyboard',    'Electronics', 10, 1200,  'North'),
+    -> (2,  'Monitor',     'Electronics', 5,  7000,  'South'),
+    -> (3,  'Chair',       'Furniture',   15, 2500,  'North'),
+    -> (4,  'Desk',        'Furniture',   7,  4500,  'West'),
+    -> (5,  'Mouse',       'Electronics', 20, 800,   'East'),
+    -> (6,  'Sofa',        'Furniture',   3,  15000, 'South'),
+    -> (7,  'Headphones',  'Electronics', 8,  1800,  'North'),
+    -> (8,  'Laptop',      'Electronics', 6,  55000, 'West'),
+    -> (9,  'Table',       'Furniture',   12, 6000,  'East'),
+    -> (10, 'Fan',         'HomeAppliance', 18, 3000, 'South'),
+    -> (11, 'AC',          'HomeAppliance', 4, 35000, 'North'),
+    -> (12, 'Cupboard',    'Furniture',   5, 12000, 'West'),
+    -> (13, 'Printer',     'Electronics', 9, 9000,  'East'),
+    -> (14, 'Bed',         'Furniture',   2, 25000, 'South'),
+    -> (15, 'Mobile',      'Electronics', 14, 20000, 'North');
+Query OK, 15 rows affected (0.03 sec)
+Records: 15  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM SALES;
+ERROR 1146 (42S02): Table 'pfs6.SALES' doesn't exist
+mysql> SELECT * FROM sales;
++---------+------------+---------------+------------+------------+--------+
+| sale_id | product    | category      | units_sold | unit_price | region |
++---------+------------+---------------+------------+------------+--------+
+|       1 | Keyboard   | Electronics   |         10 |       1200 | North  |
+|       2 | Monitor    | Electronics   |          5 |       7000 | South  |
+|       3 | Chair      | Furniture     |         15 |       2500 | North  |
+|       4 | Desk       | Furniture     |          7 |       4500 | West   |
+|       5 | Mouse      | Electronics   |         20 |        800 | East   |
+|       6 | Sofa       | Furniture     |          3 |      15000 | South  |
+|       7 | Headphones | Electronics   |          8 |       1800 | North  |
+|       8 | Laptop     | Electronics   |          6 |      55000 | West   |
+|       9 | Table      | Furniture     |         12 |       6000 | East   |
+|      10 | Fan        | HomeAppliance |         18 |       3000 | South  |
+|      11 | AC         | HomeAppliance |          4 |      35000 | North  |
+|      12 | Cupboard   | Furniture     |          5 |      12000 | West   |
+|      13 | Printer    | Electronics   |          9 |       9000 | East   |
+|      14 | Bed        | Furniture     |          2 |      25000 | South  |
+|      15 | Mobile     | Electronics   |         14 |      20000 | North  |
++---------+------------+---------------+------------+------------+--------+
+15 rows in set (0.00 sec)
+
+mysql> 
+
