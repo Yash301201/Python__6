@@ -111,8 +111,6 @@ except Exception as e:
 #In above case we will get ValueError , ZeroDivisionError
 #Possible types of errors --> TypeError, ValueError, NameError,
 #IndexError,ZeroDivisionError,AttributeError,ArithmeticError.....
-'''
-#simple scenario to understand the exception
 
 try:
     a,b = map(int,input("Enter value: ").split(','))
@@ -129,6 +127,13 @@ except AttributeError:
     print("Carefully check the methods")
 finally:
     print("It's done now you understand exception handling!")
-#In above case we will get ValueError , ZeroDivisionError
-#Possible types of errors --> TypeError, ValueError, NameError,
-#IndexError,ZeroDivisionError,AttributeError,ArithmeticError.....
+'''
+try:
+    a = [12,5,4,7]
+    print(a[5])
+    a.append('codegnan')
+    print(a)
+except (IndexError, NameError, AttributeError) as e:
+    print(e)
+finally:
+    print("Done")
