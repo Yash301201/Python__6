@@ -119,7 +119,6 @@ elif bmi < 30:
     print("Overweight")
 else:
     print("Obesity")
-'''
 
 weight = float(input("Enter weight in kg: "))
 height_cm = float(input("Enter height in cm: "))
@@ -138,3 +137,110 @@ elif bmi < 30:
     print("Overweight")
 else:
     print("Obesity")
+
+weight = float(input("Enter weight in kg: "))
+height_feet = float(input("Enter height in feet: "))
+
+height_m = height_feet * 0.3048
+
+bmi = weight / (height_m ** 2)
+
+print("BMI:", round(bmi, 2))
+
+if bmi < 18.5:
+    print("Underweight")
+
+elif bmi < 25:
+    print("Normal weight")
+
+elif bmi < 30:
+    print("Overweight")
+
+else:
+    print("Obesity")
+
+name = input("Enter your name: ")
+
+weight = float(input("Enter your weight in kg: "))
+
+unit = input("Enter height unit (feet/cm/inches/meters): ").lower()
+
+height = float(input("Enter your height: "))
+
+if unit == "feet" or unit == 'feets':
+    height_m = height * 0.3048
+
+elif unit == "cm" or unit == 'feets':
+    height_m = height / 100
+
+elif unit == "inches":
+    height_m = height * 0.0254
+
+elif unit == "meters":
+    height_m = height
+
+else:
+    print("Invalid height unit")
+
+bmi = weight / (height_m ** 2)
+
+print("Name:", name)
+print("BMI:", round(bmi, 2))
+
+if bmi < 18.5:
+    print("Underweight")
+
+elif bmi < 25:
+    print("Normal weight")
+
+elif bmi < 30:
+    print("Overweight")
+
+else:
+    print("Obesity")
+'''
+
+for i in range(3):
+
+    name = input("Enter your name: ")
+
+    weight = float(input("Enter your weight in kg: "))
+
+    unit = input("Enter height unit (feet/cm/inches/meters): ").lower()
+
+    height = float(input("Enter your height: "))
+
+    if unit == "feet" or unit == "feets":
+        height_m = height * 0.3048
+
+    elif unit == "cm":
+        height_m = height / 100
+
+    elif unit == "inches":
+        height_m = height * 0.0254
+
+    elif unit == "meters":
+        height_m = height
+
+    else:
+        print("Invalid height unit")
+        continue
+
+    bmi = weight / (height_m ** 2)
+
+    print("Name:", name)
+    print("BMI:", round(bmi, 2))
+
+    if bmi < 18.5:
+        print("Underweight")
+
+    elif bmi < 25:
+        print("Normal weight")
+
+    elif bmi < 30:
+        print("Overweight")
+
+    else:
+        print("Obesity")
+
+    print("------------------")
