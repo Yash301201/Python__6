@@ -198,7 +198,6 @@ elif bmi < 30:
 
 else:
     print("Obesity")
-'''
 
 for i in range(3):
 
@@ -244,3 +243,39 @@ for i in range(3):
         print("Obesity")
 
     print("------------------")
+
+    n = []
+w = []
+h= []
+for i in range(5):
+    name = input()
+    n.append(name)
+    weight = float(input())
+    w.append(weight)
+    height = float(input())
+    h.append(height)
+print(n)
+print(w)
+print(h)
+#Store  the name, weight, height, in a dictionary/list
+#In this case we want 5 iterations to be happened 
+dict_ = {'n' : [],
+         'w' : [],
+         'h' : []
+}
+n_ = int(input())
+for i in range(n_):
+    name = input()
+    dict_['n'].append(name)
+    weight = float(input())
+    dict_['w'].append(weight)
+    height = float(input())
+    dict_['h'].append(height)
+print(dict_['n'])
+print(dict_['w'])
+print(dict_['h'])
+'''
+#Exception handling-->
+#Exception Handling is a mechanism to a program which responds to run time 
+#error or compilations
+#Exception --> Tis tries to make out programm go in a normal flow
