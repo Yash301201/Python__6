@@ -1,0 +1,21 @@
+Constraints:- rules that control the data entered into a table...
+ 
+
+Why do we use constraints:-
+
+1. maintain data integrity
+prevent invalid data entry
+avoid duplicate records
+ensures relationship between tables,
+make the database reliable and consistent.
+
+
+integrity constraints
+
+-----
+1) NOT NULL:-
+
+The not null constraints ensures that a column cannot contain Null(Empty) values. EVERY ROW MUST HAVE VALUE FOR THAT COLUMN.
+not null:- doesn't allow null values.
+
+2) unique:-
