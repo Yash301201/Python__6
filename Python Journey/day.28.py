@@ -127,7 +127,7 @@ except AttributeError:
     print("Carefully check the methods")
 finally:
     print("It's done now you understand exception handling!")
-'''
+
 try:
     a = [12,5,4,7]
     print(a[5])
@@ -137,3 +137,4 @@ except (IndexError, NameError, AttributeError) as e:
     print(e)
 finally:
     print("Done")
+'''
