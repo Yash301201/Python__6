@@ -1,0 +1,374 @@
+Set operations:
+-----------------
+Union: Combine results from two queries and removes duplicate rows columns must have the same number and type.
+Union All: combines results from 2 queries and include all rows including duplicats must have the same number and type.
+Intersect: Returns rows that are common to both queries.(Mysql does not support intersect directly)
+Minus/Except: Returns rows from the first query that are not present in the second query. Columns must have the same number and type. 
+
+mysql> CREATE TABLE Students (
+    ->     student_id INT PRIMARY KEY,
+    ->     student_name VARCHAR(50),
+    ->     course VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO Students VALUES
+    -> (101,'Rahul','Java Full Stack'),
+    -> (102,'Priya','Python Full Stack'),
+    -> (103,'Kiran','Data Science'),
+    -> (104,'Sneha','Java Full Stack'),
+    -> (105,'Ajay','Testing');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> select * from Students;
++------------+--------------+-------------------+
+| student_id | student_name | course            |
++------------+--------------+-------------------+
+|        101 | Rahul        | Java Full Stack   |
+|        102 | Priya        | Python Full Stack |
+|        103 | Kiran        | Data Science      |
+|        104 | Sneha        | Java Full Stack   |
+|        105 | Ajay         | Testing           |
++------------+--------------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Placed_Students (
+    ->     student_id INT PRIMARY KEY,
+    ->     student_name VARCHAR(50),
+    ->     company_name VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> INSERT INTO Placed_Students VALUES
+    -> (103,'Kiran','TCS'),
+    -> (104,'Sneha','Infosys'),
+    -> (105,'Ajay','Wipro'),
+    -> (106,'Pooja','Accenture'),
+    -> (107,'Ramesh','Capgemini');
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from Placed_Students;
++------------+--------------+--------------+
+| student_id | student_name | company_name |
++------------+--------------+--------------+
+|        103 | Kiran        | TCS          |
+|        104 | Sneha        | Infosys      |
+|        105 | Ajay         | Wipro        |
+|        106 | Pooja        | Accenture    |
+|        107 | Ramesh       | Capgemini    |
++------------+--------------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> select student_name from students
+    -> union 
+    -> select student_name from placed_students
+    -> ;
+ERROR 1146 (42S02): Table 'pfs6.students' doesn't exist
+mysql> select student_name from Students
+    -> union 
+    -> select student_name from Placed_Students;
++--------------+
+| student_name |
++--------------+
+| Rahul        |
+| Priya        |
+| Kiran        |
+| Sneha        |
+| Ajay         |
+| Pooja        |
+| Ramesh       |
++--------------+
+7 rows in set (0.00 sec)
+
+mysql> select student_name from Students
+    -> union all
+    -> select student_name from Placed_Students;
++--------------+
+| student_name |
++--------------+
+| Rahul        |
+| Priya        |
+| Kiran        |
+| Sneha        |
+| Ajay         |
+| Kiran        |
+| Sneha        |
+| Ajay         |
+| Pooja        |
+| Ramesh       |
++--------------+
+10 rows in set (0.00 sec)
+
+mysql> select students_name from Students
+    -> intersect
+    -> select student_name from Placed_Students;
+ERROR 1054 (42S22): Unknown column 'students_name' in 'field list'
+mysql> select student_name from Students
+    -> intersect
+    -> select student_name from Placed_Students;
++--------------+
+| student_name |
++--------------+
+| Kiran        |
+| Sneha        |
+| Ajay         |
++--------------+
+3 rows in set (0.00 sec)
+
+mysql> select student_name from Students
+    -> minus
+    -> select student_name from Placed_Students;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select student_name from Placed_Students' at line 3
+mysql> select student_name from Students
+    -> except
+    -> select student_name from Placed_Students;
++--------------+
+| student_name |
++--------------+
+| Rahul        |
+| Priya        |
++--------------+
+2 rows in set (0.00 sec)
+
+mysql> 
+
+
+Joins:
+------
+An joins in mysql is used to combined rows from two or more tables based on related columns.
+
+example:
+employee_table: emp_details
+department--> dept_details
+
+if you want to see which employee belongings tp which department. you need to join these two tables.
+Why do you need joins?
+--------------------------
+To fetch data from multiple tables in a single query.
+To reduce data duplications (instead of keping everything in one table)
+To implement relations like(one-to-one,one-to-many,many-to-many,many-to-one)
+TO generate reports and analytics combining different dataset.
+
+Types of Joins:
+================
+Inner Join: Return only rows that have matching values in both tables.
+syntax : 
+select columns
+from table
+inner join table2
+on tabel1.common_column = table2.common_column;
+
+Left join: returns all rows from the left table and matched from the right table if no match null values appear for the right table columns.
+syntax:
+select columns
+from table
+left join table2
+on tabel1.common_column = table2.common_column;
+
+right join : returns all rows from the right table and matched from the left table if no match null values appear for the left table columns.
+syntax:
+select columns
+from table
+right join table2
+on tabel1.common_column = table2.common_column;
+
+full join: to simulate the used the union of left join and right join.
+syntax:
+select columns
+from table
+left join table2
+on tabel1.common_column = table2.common_column
+union
+select columns
+from table
+right join table2
+on tabel1.common_column = table2.common_column;
+
+cross join: returns partitions products --> every row from the first table with every row from the second table.
+syntax:
+select columns
+from table 
+cross join table2;
+self join: a table joined with itself,
+select a.column,b.columns
+from table1 a 
+inner join table1 b
+on a.common_column=b.common_column;
+
+
+mysql> create table tab1(numid int);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table tab2(numid int);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into table tab1 values(10),(11),(12),(13),(15);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table tab1 values(10),(11),(12),(13),(15)' at line 1
+mysql> insert into table tab2 values(10),(11),(12),(13),(15);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table tab2 values(10),(11),(12),(13),(15)' at line 1
+mysql> insert into tab2 values(10),(11),(12),(13),(15);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from tab2;
++-------+
+| numid |
++-------+
+|    10 |
+|    11 |
+|    12 |
+|    13 |
+|    15 |
++-------+
+5 rows in set (0.00 sec)
+
+mysql> select * from tab1;
+Empty set (0.00 sec)
+
+mysql> insert into tab1 values(10),(11),(12),(13),(14);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from tab1;
++-------+
+| numid |
++-------+
+|    10 |
+|    11 |
+|    12 |
+|    13 |
+|    14 |
++-------+
+5 rows in set (0.01 sec)
+
+mysql> -- inner join 
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from tab1
+    -> inner join tab2 
+    -> on tab1.numd=tab2.numid;
+ERROR 1054 (42S22): Unknown column 'tab1.numd' in 'on clause'
+mysql> select * from tab1 inner join tab2   on tab1.numid=tab2.numid;
++-------+-------+
+| numid | numid |
++-------+-------+
+|    10 |    10 |
+|    11 |    11 |
+|    12 |    12 |
+|    13 |    13 |
++-------+-------+
+4 rows in set (0.01 sec)
+
+mysql> select * from tab1
+    -> left join tab2 
+    -> on tab1.numid=tab2.numid;
++-------+-------+
+| numid | numid |
++-------+-------+
+|    10 |    10 |
+|    11 |    11 |
+|    12 |    12 |
+|    13 |    13 |
+|    14 |  NULL |
++-------+-------+
+5 rows in set (0.00 sec)
+
+mysql> select * from tab1 inner join tab2   on tab1.numid=tab2.numid;
++-------+-------+
+| numid | numid |
++-------+-------+
+|    10 |    10 |
+|    11 |    11 |
+|    12 |    12 |
+|    13 |    13 |
++-------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select * from tab1 right join tab2   on tab1.numid=tab2.numid;
++-------+-------+
+| numid | numid |
++-------+-------+
+|    10 |    10 |
+|    11 |    11 |
+|    12 |    12 |
+|    13 |    13 |
+|  NULL |    15 |
++-------+-------+
+5 rows in set (0.00 sec)
+
+mysql> select * from tab1
+    -> letf join tab2
+    -> on tab1.numid=tab2.numid
+    -> union
+    -> select * from tab1
+    -> right join tab2
+    -> on tab1.numid=tab2.numid;
+ERROR 1054 (42S22): Unknown column 'tab1.numid' in 'on clause'
+mysql> SELECT *
+    -> FROM tab1
+    -> LEFT JOIN tab2
+    -> ON tab1.id = tab2.id
+    -> 
+    -> UNION
+    -> 
+    -> SELECT *
+    -> FROM tab1
+    -> RIGHT JOIN tab2
+    -> ON tab1.id = tab2.id;
+ERROR 1054 (42S22): Unknown column 'tab1.id' in 'on clause'
+mysql> SELECT * FROM tab1
+    -> LEFT JOIN tab2
+    -> ON tab1.numid = tab2.numid
+    -> 
+    -> UNION
+    -> 
+    -> SELECT * FROM tab1
+    -> RIGHT JOIN tab2
+    -> ON tab1.numid = tab2.numid;
++-------+-------+
+| numid | numid |
++-------+-------+
+|    10 |    10 |
+|    11 |    11 |
+|    12 |    12 |
+|    13 |    13 |
+|    14 |  NULL |
+|  NULL |    15 |
++-------+-------+
+6 rows in set (0.00 sec)
+
+mysql> select * from tab1 cross join tab2;
++-------+-------+
+| numid | numid |
++-------+-------+
+|    14 |    10 |
+|    13 |    10 |
+|    12 |    10 |
+|    11 |    10 |
+|    10 |    10 |
+|    14 |    11 |
+|    13 |    11 |
+|    12 |    11 |
+|    11 |    11 |
+|    10 |    11 |
+|    14 |    12 |
+|    13 |    12 |
+|    12 |    12 |
+|    11 |    12 |
+|    10 |    12 |
+|    14 |    13 |
+|    13 |    13 |
+|    12 |    13 |
+|    11 |    13 |
+|    10 |    13 |
+|    14 |    15 |
+|    13 |    15 |
+|    12 |    15 |
+|    11 |    15 |
+|    10 |    15 |
++-------+-------+
+25 rows in set (0.00 sec)
+
