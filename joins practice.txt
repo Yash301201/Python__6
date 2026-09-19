@@ -1,0 +1,632 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| pfs6               |
+| sys                |
++--------------------+
+5 rows in set (0.01 sec)
+
+mysql> use pfs6;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++---------------------+
+| Tables_in_pfs6      |
++---------------------+
+| Placed_Students     |
+| STUDENTS            |
+| Students            |
+| course_3NF          |
+| employee_attendance |
+| employees           |
+| enrollment_2NF      |
+| enrollment_3NF      |
+| sales               |
+| student_2NF         |
+| student_course_1NF  |
+| student_details     |
+| tab1                |
+| tab2                |
+| trainer_3NF         |
++---------------------+
+15 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Employees (
+    ->     emp_id INT PRIMARY KEY,
+    ->     name VARCHAR(100),
+    ->     department_id INT,
+    ->     salary DECIMAL(10,2)
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> 
+mysql> CREATE TABLE Departments (
+    ->     department_id INT PRIMARY KEY,
+    ->     department_name VARCHAR(100)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> CREATE TABLE Projects (
+    ->     project_id INT PRIMARY KEY,
+    ->     project_name VARCHAR(100),
+    ->     emp_id INT
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> INSERT INTO Departments (department_id, department_name) VALUES
+    -> (1, 'Human Resources'),
+    -> (2, 'Engineering'),
+    -> (3, 'Marketing'),
+    -> (4, 'Finance'),
+    -> (5, 'Operations');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> 
+mysql> 
+mysql> INSERT INTO Employees (emp_id, name, department_id, salary) VALUES
+    -> (101, 'Arjun', 1, 50000),
+    -> (102, 'Bhavana', 2, 65000),
+    -> (103, 'Charan', 2, 72000),
+    -> (104, 'Divya', 3, 45000),
+    -> (105, 'Eswar', NULL, 40000),
+    -> (106, 'Farhan', 4, 55000),
+    -> (107, 'Gowri', 2, 62000),
+    -> (108, 'Harish', 5, 48000),
+    -> (109, 'Ishita', NULL, 53000),
+    -> (110, 'Jagan', 3, 60000);
+Query OK, 10 rows affected (0.00 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> 
+mysql> INSERT INTO Projects (project_id, project_name, emp_id) VALUES
+    -> (201, 'Website Redesign', 102),
+    -> (202, 'Mobile Banking App', 103),
+    -> (203, 'Marketing Campaign', 104),
+    -> (204, 'Payroll System', 106),
+    -> (205, 'Backend Optimization', 107),
+    -> (206, 'Cloud Migration', 102),
+    -> (207, 'Customer Analytics', 110),
+    -> (208, 'Inventory System', NULL);
+Query OK, 8 rows affected (0.01 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> select * from Employees;
++--------+---------+---------------+----------+
+| emp_id | name    | department_id | salary   |
++--------+---------+---------------+----------+
+|    101 | Arjun   |             1 | 50000.00 |
+|    102 | Bhavana |             2 | 65000.00 |
+|    103 | Charan  |             2 | 72000.00 |
+|    104 | Divya   |             3 | 45000.00 |
+|    105 | Eswar   |          NULL | 40000.00 |
+|    106 | Farhan  |             4 | 55000.00 |
+|    107 | Gowri   |             2 | 62000.00 |
+|    108 | Harish  |             5 | 48000.00 |
+|    109 | Ishita  |          NULL | 53000.00 |
+|    110 | Jagan   |             3 | 60000.00 |
++--------+---------+---------------+----------+
+10 rows in set (0.00 sec)
+
+mysql> select * from Departments;
++---------------+-----------------+
+| department_id | department_name |
++---------------+-----------------+
+|             1 | Human Resources |
+|             2 | Engineering     |
+|             3 | Marketing       |
+|             4 | Finance         |
+|             5 | Operations      |
++---------------+-----------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from Projects;
++------------+----------------------+--------+
+| project_id | project_name         | emp_id |
++------------+----------------------+--------+
+|        201 | Website Redesign     |    102 |
+|        202 | Mobile Banking App   |    103 |
+|        203 | Marketing Campaign   |    104 |
+|        204 | Payroll System       |    106 |
+|        205 | Backend Optimization |    107 |
+|        206 | Cloud Migration      |    102 |
+|        207 | Customer Analytics   |    110 |
+|        208 | Inventory System     |   NULL |
++------------+----------------------+--------+
+8 rows in set (0.00 sec)
+
+mysql> -- get all employees with their departments .
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select e.emp_id,e.emp_name,d.department_name
+    -> from employees e 
+    -> inner join departments d
+    -> on e.emp_id = d.department_id ;
+ERROR 1146 (42S02): Table 'pfs6.departments' doesn't exist
+mysql> select e.emp_id,e.name,d.department_name from employees e  inner join departments d on e.emp_id = d.department_id;
+ERROR 1146 (42S02): Table 'pfs6.departments' doesn't exist
+mysql> SELECT 
+    ->     e.emp_id,
+    ->     e.name,
+    ->     d.department_name
+    -> FROM Employees e
+    -> INNER JOIN Departments d
+    -> ON e.department_id = d.department_id;
++--------+---------+-----------------+
+| emp_id | name    | department_name |
++--------+---------+-----------------+
+|    101 | Arjun   | Human Resources |
+|    102 | Bhavana | Engineering     |
+|    103 | Charan  | Engineering     |
+|    104 | Divya   | Marketing       |
+|    106 | Farhan  | Finance         |
+|    107 | Gowri   | Engineering     |
+|    108 | Harish  | Operations      |
+|    110 | Jagan   | Marketing       |
++--------+---------+-----------------+
+8 rows in set (0.00 sec)
+
+mysql> -- find employees who assigned to the project.
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select e.emp_id,e.name,p.project_name
+    -> from employees e
+    -> inner join projects p
+    -> on e.emp_id = p.emp_id;
+ERROR 1146 (42S02): Table 'pfs6.projects' doesn't exist
+mysql> SELECT E.EMP_ID,E.NAME,P.PROJECT_NAME
+    -> FROM EMPLOYEES E 
+    -> ON E.EMP_ID = P.PROJECTS P
+    -> ^C
+mysql> SELECT E.EMP_ID,E.NAME,P.PROJECT_NAME
+    -> FROM EMPLOYEES E
+    -> INNER JOIN EMPLOYEES E
+    -> ON E.EMP_ID =P.EMP_ID;
+ERROR 1066 (42000): Not unique table/alias: 'E'
+mysql> SELECT 
+    ->     e.emp_id,
+    ->     e.name,
+    ->     p.project_name
+    -> FROM Employees e
+    -> INNER JOIN Projects p
+    -> ON e.emp_id = p.emp_id;
++--------+---------+----------------------+
+| emp_id | name    | project_name         |
++--------+---------+----------------------+
+|    102 | Bhavana | Website Redesign     |
+|    103 | Charan  | Mobile Banking App   |
+|    104 | Divya   | Marketing Campaign   |
+|    106 | Farhan  | Payroll System       |
+|    107 | Gowri   | Backend Optimization |
+|    102 | Bhavana | Cloud Migration      |
+|    110 | Jagan   | Customer Analytics   |
++--------+---------+----------------------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT 
+    ->     e.emp_id,
+    ->     e.name,
+    ->     p.project_name
+    -> FROM Employees e
+    -> LEFT JOIN Projects p
+    -> ON e.emp_id = p.emp_id;
++--------+---------+----------------------+
+| emp_id | name    | project_name         |
++--------+---------+----------------------+
+|    101 | Arjun   | NULL                 |
+|    102 | Bhavana | Cloud Migration      |
+|    102 | Bhavana | Website Redesign     |
+|    103 | Charan  | Mobile Banking App   |
+|    104 | Divya   | Marketing Campaign   |
+|    105 | Eswar   | NULL                 |
+|    106 | Farhan  | Payroll System       |
+|    107 | Gowri   | Backend Optimization |
+|    108 | Harish  | NULL                 |
+|    109 | Ishita  | NULL                 |
+|    110 | Jagan   | Customer Analytics   |
++--------+---------+----------------------+
+11 rows in set (0.00 sec)
+
+mysql> SELECT 
+    ->     e.emp_id,
+    ->     e.name,
+    ->     d.department_name
+    -> FROM Employees e
+    -> LEFT JOIN Departments d
+    ->     ON e.department_id = d.department_id;
++--------+---------+-----------------+
+| emp_id | name    | department_name |
++--------+---------+-----------------+
+|    101 | Arjun   | Human Resources |
+|    102 | Bhavana | Engineering     |
+|    103 | Charan  | Engineering     |
+|    104 | Divya   | Marketing       |
+|    105 | Eswar   | NULL            |
+|    106 | Farhan  | Finance         |
+|    107 | Gowri   | Engineering     |
+|    108 | Harish  | Operations      |
+|    109 | Ishita  | NULL            |
+|    110 | Jagan   | Marketing       |
++--------+---------+-----------------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT 
+    ->     e.emp_id,
+    ->     e.name,
+    ->     d.department_name
+    -> FROM Employees e
+    -> LEFT JOIN Departments d
+    ->     ON e.department_id = d.department_id
+    -> WHERE d.department_name IS NULL;
++--------+--------+-----------------+
+| emp_id | name   | department_name |
++--------+--------+-----------------+
+|    105 | Eswar  | NULL            |
+|    109 | Ishita | NULL            |
++--------+--------+-----------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT 
+    ->     e.emp_id,
+    ->     e.name
+    -> FROM Employees e
+    -> LEFT JOIN Projects p
+    ->     ON e.emp_id = p.emp_id
+    -> WHERE p.emp_id IS NULL;
++--------+--------+
+| emp_id | name   |
++--------+--------+
+|    101 | Arjun  |
+|    105 | Eswar  |
+|    108 | Harish |
+|    109 | Ishita |
++--------+--------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT 
+    ->     e.emp_id,
+    ->     e.name,
+    ->     d.department_name
+    -> FROM Employees e
+    -> LEFT JOIN Projects p
+    ->     ON e.emp_id = p.emp_id
+    -> LEFT JOIN Departments d
+    ->     ON e.department_id = d.department_id
+    -> WHERE p.emp_id IS NULL;
++--------+--------+-----------------+
+| emp_id | name   | department_name |
++--------+--------+-----------------+
+|    101 | Arjun  | Human Resources |
+|    105 | Eswar  | NULL            |
+|    108 | Harish | Operations      |
+|    109 | Ishita | NULL            |
++--------+--------+-----------------+
+4 rows in set (0.00 sec)
+
+mysql> -- all department and the employees in them;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into departments values(6,'sales);
+    '> ^C
+mysql> INSERT INTO departments VALUES(6, 'sales');
+ERROR 1146 (42S02): Table 'pfs6.departments' doesn't exist
+mysql> SHOW TABLES;
++---------------------+
+| Tables_in_pfs6      |
++---------------------+
+| Departments         |
+| Employees           |
+| Placed_Students     |
+| Projects            |
+| STUDENTS            |
+| Students            |
+| course_3NF          |
+| employee_attendance |
+| employees           |
+| enrollment_2NF      |
+| enrollment_3NF      |
+| sales               |
+| student_2NF         |
+| student_course_1NF  |
+| student_details     |
+| tab1                |
+| tab2                |
+| trainer_3NF         |
++---------------------+
+18 rows in set (0.00 sec)
+
+mysql> SHOW TABLES LIKE 'Departments';
++------------------------------+
+| Tables_in_pfs6 (Departments) |
++------------------------------+
+| Departments                  |
++------------------------------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO Departments
+    -> VALUES (6, 'sales');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select d.department_name, e.name
+    -> from departments d
+    -> right join employees e
+    -> on d.department_id = e.department_id;
+ERROR 1146 (42S02): Table 'pfs6.departments' doesn't exist
+mysql> SELECT 
+    ->     d.department_name,
+    ->     e.name
+    -> FROM Departments d
+    -> RIGHT JOIN Employees e
+    ->     ON d.department_id = e.department_id;
++-----------------+---------+
+| department_name | name    |
++-----------------+---------+
+| Human Resources | Arjun   |
+| Engineering     | Bhavana |
+| Engineering     | Charan  |
+| Marketing       | Divya   |
+| NULL            | Eswar   |
+| Finance         | Farhan  |
+| Engineering     | Gowri   |
+| Operations      | Harish  |
+| NULL            | Ishita  |
+| Marketing       | Jagan   |
++-----------------+---------+
+10 rows in set (0.00 sec)
+
+mysql> seelct e1.name as employess as employee1,e2.name as employee2,e1.department_id
+    -> from employees e1 
+    -> join employees e2
+    -> on e1.department_id = e2.department_id and emp_id != e2.emp_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'seelct e1.name as employess as employee1,e2.name as employee2,e1.department_id
+f' at line 1
+mysql> SELECT 
+    ->     e1.name AS employee1,
+    ->     e2.name AS employee2,
+    ->     e1.department_id
+    -> FROM Employees e1
+    -> JOIN Employees e2
+    ->     ON e1.department_id = e2.department_id
+    ->     AND e1.emp_id != e2.emp_id;
++-----------+-----------+---------------+
+| employee1 | employee2 | department_id |
++-----------+-----------+---------------+
+| Gowri     | Bhavana   |             2 |
+| Charan    | Bhavana   |             2 |
+| Gowri     | Charan    |             2 |
+| Bhavana   | Charan    |             2 |
+| Jagan     | Divya     |             3 |
+| Charan    | Gowri     |             2 |
+| Bhavana   | Gowri     |             2 |
+| Divya     | Jagan     |             3 |
++-----------+-----------+---------------+
+8 rows in set (0.00 sec)
+
+mysql> select e.name,d.department_name from employees e left join departments d
+    -> on e.department_id = d.department_id
+    -> union 
+    -> select e.name, d.department_name from employees e right join departments d 
+    -> on e.department_id = d.department_id;
+ERROR 1146 (42S02): Table 'pfs6.departments' doesn't exist
+mysql> SELECT 
+    ->     e.name,
+    ->     d.department_name
+    -> FROM Employees e
+    -> LEFT JOIN Departments d
+    ->     ON e.department_id = d.department_id
+    -> 
+    -> UNION
+    -> 
+    -> SELECT 
+    ->     e.name,
+    ->     d.department_name
+    -> FROM Employees e
+    -> RIGHT JOIN Departments d
+    ->     ON e.department_id = d.department_id;
++---------+-----------------+
+| name    | department_name |
++---------+-----------------+
+| Arjun   | Human Resources |
+| Bhavana | Engineering     |
+| Charan  | Engineering     |
+| Divya   | Marketing       |
+| Eswar   | NULL            |
+| Farhan  | Finance         |
+| Gowri   | Engineering     |
+| Harish  | Operations      |
+| Ishita  | NULL            |
+| Jagan   | Marketing       |
+| NULL    | sales           |
++---------+-----------------+
+11 rows in set (0.01 sec)
+
+mysql> select d.dpeartment_name, count(e.emp_id) as total_employees
+    -> from department_d
+    -> left join employees_e on d.department_id =e.department_id
+    -> group by d.department_name;
+ERROR 1146 (42S02): Table 'pfs6.department_d' doesn't exist
+mysql> SELECT 
+    ->     d.department_name,
+    ->     COUNT(e.emp_id) AS total_employees
+    -> FROM Departments d
+    -> LEFT JOIN Employees e
+    ->     ON d.department_id = e.department_id
+    -> GROUP BY d.department_name;
++-----------------+-----------------+
+| department_name | total_employees |
++-----------------+-----------------+
+| Human Resources |               1 |
+| Engineering     |               3 |
+| Marketing       |               2 |
+| Finance         |               1 |
+| Operations      |               1 |
+| sales           |               0 |
++-----------------+-----------------+
+6 rows in set (0.01 sec)
+
+mysql> SELECT 
+    ->     d.department_name,
+    ->     SUM(e.salary) AS total_salary
+    -> FROM Departments d
+    -> LEFT JOIN Employees e
+    ->     ON d.department_id = e.department_id
+    -> GROUP BY d.department_name;
++-----------------+--------------+
+| department_name | total_salary |
++-----------------+--------------+
+| Human Resources |     50000.00 |
+| Engineering     |    199000.00 |
+| Marketing       |    105000.00 |
+| Finance         |     55000.00 |
+| Operations      |     48000.00 |
+| sales           |         NULL |
++-----------------+--------------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT 
+    ->     e.emp_id,
+    ->     e.name,
+    ->     COUNT(p.project_id) AS total_projects
+    -> FROM Employees e
+    -> LEFT JOIN Projects p
+    ->     ON e.emp_id = p.emp_id
+    -> GROUP BY e.emp_id, e.name;
++--------+---------+----------------+
+| emp_id | name    | total_projects |
++--------+---------+----------------+
+|    101 | Arjun   |              0 |
+|    102 | Bhavana |              2 |
+|    103 | Charan  |              1 |
+|    104 | Divya   |              1 |
+|    105 | Eswar   |              0 |
+|    106 | Farhan  |              1 |
+|    107 | Gowri   |              1 |
+|    108 | Harish  |              0 |
+|    109 | Ishita  |              0 |
+|    110 | Jagan   |              1 |
++--------+---------+----------------+
+10 rows in set (0.00 sec)
+
+mysql> -- list all employees with their departments name ordered by salary.
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> -- show employees names and their project names, orderd by employees name.
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select 
+    -> 
+Display all 878 possibilities? (y or n) 
+    -> 
+    ->     e.name
+    -> ^C
+mysql> select e.name d.department_name,e.salary
+    -> from employees e join departments d on e.department_id = d.department_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.department_name,e.salary
+from employees e join departments d on e.department_id' at line 1
+mysql> SELECT 
+    ->     e.name,
+    ->     d.department_name,
+    ->     e.salary
+    -> FROM Employees e
+    -> JOIN Departments d
+    ->     ON e.department_id = d.department_id
+    -> ORDER BY e.salary;
++---------+-----------------+----------+
+| name    | department_name | salary   |
++---------+-----------------+----------+
+| Divya   | Marketing       | 45000.00 |
+| Harish  | Operations      | 48000.00 |
+| Arjun   | Human Resources | 50000.00 |
+| Farhan  | Finance         | 55000.00 |
+| Jagan   | Marketing       | 60000.00 |
+| Gowri   | Engineering     | 62000.00 |
+| Bhavana | Engineering     | 65000.00 |
+| Charan  | Engineering     | 72000.00 |
++---------+-----------------+----------+
+8 rows in set (0.00 sec)
+
+mysql> -- departments and employees count, ordered by count(highest first)
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT 
+    ->     d.department_name,
+    ->     COUNT(e.emp_id) AS employee_count
+    -> FROM Departments d
+    -> LEFT JOIN Employees e
+    ->     ON d.department_id = e.department_id
+    -> GROUP BY d.department_name
+    -> ORDER BY employee_count DESC;
++-----------------+----------------+
+| department_name | employee_count |
++-----------------+----------------+
+| Engineering     |              3 |
+| Marketing       |              2 |
+| Human Resources |              1 |
+| Finance         |              1 |
+| Operations      |              1 |
+| sales           |              0 |
++-----------------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT 
+    ->     d.department_name,
+    ->     COUNT(e.emp_id) AS employee_count
+    -> FROM Departments d
+    -> LEFT JOIN Employees e
+    ->     ON d.department_id = e.department_id
+    -> GROUP BY d.department_name
+    -> HAVING COUNT(e.emp_id) > 1
+    -> ORDER BY employee_count DESC;
++-----------------+----------------+
+| department_name | employee_count |
++-----------------+----------------+
+| Engineering     |              3 |
+| Marketing       |              2 |
++-----------------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT 
+    ->     d.department_name,
+    ->     COUNT(e.emp_id) AS employee_count
+    -> FROM Departments d
+    -> LEFT JOIN Employees e
+    ->     ON d.department_id = e.department_id
+    -> GROUP BY d.department_name
+    -> HAVING COUNT(e.emp_id) > 1
+    -> ORDER BY employee_count DESC;
++-----------------+----------------+
+| department_name | employee_count |
++-----------------+----------------+
+| Engineering     |              3 |
+| Marketing       |              2 |
++-----------------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT 
+    ->     d.department_name,
+    ->     SUM(e.salary) AS total_salary
+    -> FROM Departments d
+    -> JOIN Employees e
+    ->     ON d.department_id = e.department_id
+    -> GROUP BY d.department_name
+    -> HAVING SUM(e.salary) > 50000
+    -> ORDER BY total_salary DESC;
++-----------------+--------------+
+| department_name | total_salary |
++-----------------+--------------+
+| Engineering     |    199000.00 |
+| Marketing       |    105000.00 |
+| Finance         |     55000.00 |
++-----------------+--------------+
+3 rows in set (0.00 sec)
+
+mysql> 
+
